@@ -51,7 +51,7 @@ O arquivo `docker-compose.yml` define os seguintes serviços:
      - `MYSQL_USER=admin`
      - `MYSQL_PASSWORD=admin`
    - Porta exposta: `8002:3306`
-5. **php-apache**: Executa uma instância do PHP 7.4 com o Apache, com as seguintes configurações:
+5. **php-apache**: Executa uma instância do PHP 8.3 com o Apache, com as seguintes configurações:
    - Dependência: `mysql` (inicia após o MySQL)
    - Volume montado: `./htdocs/:/var/www/html/` (monta o diretório `htdocs/` no container)
    - Porta exposta: `8000:80`
@@ -71,3 +71,67 @@ Remover os containers:
 Copiar
 docker-compose down
 Este comando irá parar e remover todos os containers, redes e volumes definidos no arquivo docker-compose.yml.
+
+# Olá Mundo em PHP (Terminal mode)
+
+1.  Crie a estrutura de diretórios para o projeto hello world:
+
+```bash
+$ mkdir -p projects/hello-world
+$ cd projects/hello-word
+```
+
+1. Crie um arquivo chamado hello.php,  dentro da pasta hello-world, com o seguinte conteúdo
+
+```php
+# hello.php
+<?php echo "Olá mundo!" ?>
+```
+
+1. No terminal, execute o comando docker para executar o arquivo php criado
+
+```bash
+$ docker run -it --rm -v $(pwd):/usr/src/scripts -w /usr/src/scripts/ php php hello.php
+```
+
+1. Você deve visualizar a seguinte saída
+Olá mundo!
+2. Criando uma alias para o comando php.
+
+Adicione a seguinte linha no final do arquivo ~/.bashrc
+
+```bash
+alias php='docker run -it --rm -v $PWD:/usr/src/scripts -w /usr/src/scripts/ php php'
+```
+
+1. Feche e abra o terminal
+2. Agora poderá executar o mesmo arquivo por meio do comando php
+
+```bash
+$ php -v
+PHP 8.3.13 (cli) (built: Oct 28 2024 22:04:38) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.3.13, Copyright (c) Zend Technologies
+
+$ php hello.php
+Olá mundo!!
+```
+
+1. Modifique o algoritmo para receber seu nome e imprimir uma mensagem de boas vindas. O código deve ser como segue:
+
+```php
+<?php
+
+echo "Digite seu nome: ";
+$name = trim(fgets(STDIN));
+
+echo "Olá $name, seja bem-vindo a disciplina de Desenvolvimento de Aplicações Back-End!";
+```
+
+1. Execução e saída
+
+```bash
+❯ php hello.php
+Digite seu nome: Klesio
+Olá Klesio, seja bem-vindo a disciplina de Desenvolvimento de Aplicações Back-End!
+```
